@@ -1,0 +1,29 @@
+{
+  "name": "temporal-funding-requests",
+  "version": "1.0.0",
+  "description": "Funding request processing workflow with Temporal",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "start:worker": "tsx src/infrastructure/temporal/worker.ts",
+    "start:api": "tsx src/infrastructure/http/server.ts",
+    "start": "concurrently \"pnpm start:worker\" \"pnpm start:api\""
+  },
+  "dependencies": {
+    "@temporalio/activity": "^1.11.0",
+    "@temporalio/client": "^1.11.0",
+    "@temporalio/worker": "^1.11.0",
+    "@temporalio/workflow": "^1.11.0",
+    "@fastify/cors": "^9.0.0",
+    "fastify": "^4.28.0",
+    "dotenv": "^16.4.0",
+    "uuid": "^9.0.0",
+    "concurrently": "^8.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "tsx": "^4.7.0",
+    "@types/node": "^20.0.0",
+    "@types/uuid": "^9.0.0"
+  }
+}
