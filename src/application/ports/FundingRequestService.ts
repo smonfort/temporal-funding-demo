@@ -2,7 +2,7 @@ import type {
   FundingRequestDetails,
   FundingRequestStatus,
   ValidationDecision,
-} from '../../domain/FundingRequest';
+} from '../../domain/fundingRequest';
 
 export interface CreateFundingRequestInput {
   userId: string;

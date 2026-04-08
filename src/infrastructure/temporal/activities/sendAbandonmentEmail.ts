@@ -1,4 +1,4 @@
-import type { AbandonmentEmailParams, EmailResult } from '../../../domain/FundingRequest';
+import type { AbandonmentEmailParams, EmailResult } from '../../../domain/fundingRequest';
 
 /**
  * Sends an abandonment notification email after 7 days without a response.

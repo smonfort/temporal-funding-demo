@@ -1,4 +1,4 @@
-import type { FraudCheckParams } from '../../../domain/FundingRequest';
+import type { FraudCheckParams } from '../../../domain/fundingRequest';
 
 /**
  * Checks whether a funding request is fraudulent via a mocked external API.

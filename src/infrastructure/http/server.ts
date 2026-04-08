@@ -1,9 +1,9 @@
 import 'dotenv/config';
 import cors from '@fastify/cors';
 import Fastify from 'fastify';
-import type { FundingRequestService } from '../../application/ports/FundingRequestService';
+import type { FundingRequestService } from '../../application/ports/fundingRequestService';
 import { getTemporalClient } from '../temporal/client';
-import { TemporalFundingRequestService } from '../temporal/TemporalFundingRequestService';
+import { TemporalFundingRequestService } from '../temporal/temporalFundingRequestService';
 import createFundingRequest from './routes/createFundingRequest';
 import getFundingRequest from './routes/getFundingRequest';
 import listFundingRequests from './routes/listFundingRequests';

@@ -1,4 +1,4 @@
-import type { EmailResult, ReminderEmailParams } from '../../../domain/FundingRequest';
+import type { EmailResult, ReminderEmailParams } from '../../../domain/fundingRequest';
 
 const DOC_LABELS: Record<string, string> = {
   identity: 'Government-issued ID',

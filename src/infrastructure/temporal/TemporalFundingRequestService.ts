@@ -4,14 +4,14 @@ import type {
   FundingRequestDetails,
   FundingRequestStatus,
   ValidationDecision,
-} from '../../domain/FundingRequest';
+} from '../../domain/fundingRequest';
 import type {
   ConflictError,
   CreateFundingRequestInput,
   CreatedFundingRequest,
   FundingRequestService,
   NotFoundError,
-} from '../../application/ports/FundingRequestService';
+} from '../../application/ports/fundingRequestService';
 import { QUERIES, SIGNALS, TASK_QUEUE, WORKFLOW_TYPE } from './workflowConstants';
 
 export class TemporalFundingRequestService implements FundingRequestService {

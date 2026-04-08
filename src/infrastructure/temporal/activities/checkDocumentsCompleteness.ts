@@ -1,5 +1,5 @@
 import { REQUIRED_DOCUMENTS } from '../../../domain/constants';
-import type { DocumentsCheckResult } from '../../../domain/FundingRequest';
+import type { DocumentsCheckResult } from '../../../domain/fundingRequest';
 
 /**
  * Checks that all required supporting documents have been provided.

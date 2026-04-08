@@ -16,7 +16,7 @@ import type {
   FundingRequestStatus,
   ValidationDecision,
   WorkflowResult,
-} from '../../domain/FundingRequest';
+} from '../../domain/fundingRequest';
 import { DOCUMENT_WAIT_DAYS, HUMAN_VALIDATION_THRESHOLD } from '../../domain/constants';
 
 // Activities are resolved by the worker — timeout and retry policy configured here
