@@ -65,19 +65,25 @@ interface WorkflowState {
 function registerHandlers(request: FundingRequest, state: WorkflowState): void {
   setHandler(getStatusQuery, () => state.status);
 
-  setHandler(getDetailsQuery, (): FundingRequestDetails => ({
-    id: request.id,
-    userId: request.userId,
-    userEmail: request.userEmail,
-    amount: request.amount,
-    purpose: request.purpose,
-    documents: request.documents,
-    status: state.status,
-    rejectionReason: state.rejectionReason,
-  }));
+  setHandler(
+    getDetailsQuery,
+    (): FundingRequestDetails => ({
+      id: request.id,
+      userId: request.userId,
+      userEmail: request.userEmail,
+      amount: request.amount,
+      purpose: request.purpose,
+      documents: request.documents,
+      status: state.status,
+      rejectionReason: state.rejectionReason,
+    }),
+  );
 
   setHandler(humanValidationSignal, (decision: ValidationDecision) => {
-    log.info('Human validation signal received', { approved: decision.approved, validatorId: decision.validatorId });
+    log.info('Human validation signal received', {
+      approved: decision.approved,
+      validatorId: decision.validatorId,
+    });
     state.validationDecision = decision;
   });
 
@@ -87,7 +93,10 @@ function registerHandlers(request: FundingRequest, state: WorkflowState): void {
   });
 }
 
-async function runDocumentVerification(request: FundingRequest, state: WorkflowState): Promise<WorkflowResult | null> {
+async function runDocumentVerification(
+  request: FundingRequest,
+  state: WorkflowState,
+): Promise<WorkflowResult | null> {
   state.status = 'CHECKING_DOCUMENTS';
   log.info('Step 1 — Checking document completeness', { requestId: request.id });
 
@@ -105,7 +114,7 @@ async function runDocumentVerification(request: FundingRequest, state: WorkflowS
 
     // Wait for documents with daily reminders, up to DOCUMENT_WAIT_DAYS days.
     // condition() returns true if the signal arrived before the timeout, false if timed out.
-    let docsReceived = false;
+    let docsReceived;
 
     for (let day = 0; day < DOCUMENT_WAIT_DAYS; day++) {
       docsReceived = await condition(() => state.updatedDocuments !== null, '24 hours');
@@ -115,9 +124,14 @@ async function runDocumentVerification(request: FundingRequest, state: WorkflowS
       if (day === DOCUMENT_WAIT_DAYS - 1) {
         // Days elapsed with no response — abandon the request
         state.status = 'ABANDONED';
-        log.warn('Request abandoned — no documents received after 7 days', { requestId: request.id });
+        log.warn('Request abandoned — no documents received after 7 days', {
+          requestId: request.id,
+        });
         await sendAbandonmentEmail({ userEmail: request.userEmail, requestId: request.id });
-        return { status: state.status, reason: 'Request abandoned: supporting documents not provided within 7 days' };
+        return {
+          status: state.status,
+          reason: 'Request abandoned: supporting documents not provided within 7 days',
+        };
       }
 
       // Send daily reminder (days 1 through DOCUMENT_WAIT_DAYS - 1)
@@ -138,7 +152,10 @@ async function runDocumentVerification(request: FundingRequest, state: WorkflowS
   return null;
 }
 
-async function runFraudDetection(request: FundingRequest, state: WorkflowState): Promise<WorkflowResult | null> {
+async function runFraudDetection(
+  request: FundingRequest,
+  state: WorkflowState,
+): Promise<WorkflowResult | null> {
   state.status = 'CHECKING_FRAUD';
   log.info('Step 2 — Running fraud detection', { requestId: request.id });
 
@@ -158,10 +175,16 @@ async function runFraudDetection(request: FundingRequest, state: WorkflowState):
   return null;
 }
 
-async function runHumanValidation(request: FundingRequest, state: WorkflowState): Promise<WorkflowResult> {
+async function runHumanValidation(
+  request: FundingRequest,
+  state: WorkflowState,
+): Promise<WorkflowResult> {
   if (request.amount <= HUMAN_VALIDATION_THRESHOLD) {
     state.status = 'APPROVED';
-    log.info(`Request auto-approved (amount ≤ €${HUMAN_VALIDATION_THRESHOLD})`, { requestId: request.id, amount: request.amount });
+    log.info(`Request auto-approved (amount ≤ €${HUMAN_VALIDATION_THRESHOLD})`, {
+      requestId: request.id,
+      amount: request.amount,
+    });
     return { status: state.status };
   }
 
@@ -176,12 +199,18 @@ async function runHumanValidation(request: FundingRequest, state: WorkflowState)
 
   if (decision.approved) {
     state.status = 'APPROVED';
-    log.info('Request approved by validator', { requestId: request.id, validatorId: decision.validatorId });
+    log.info('Request approved by validator', {
+      requestId: request.id,
+      validatorId: decision.validatorId,
+    });
     return { status: state.status };
   } else {
     state.status = 'REJECTED';
     state.rejectionReason = decision.reason ?? 'Rejected by validator';
-    log.info('Request rejected by validator', { requestId: request.id, reason: state.rejectionReason });
+    log.info('Request rejected by validator', {
+      requestId: request.id,
+      reason: state.rejectionReason,
+    });
     return { status: state.status, reason: state.rejectionReason };
   }
 }

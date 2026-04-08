@@ -42,14 +42,8 @@ export interface FundingRequestService {
   listPendingValidation(): Promise<FundingRequestDetails[]>;
 
   /** Submit a validation decision. Returns an error if the request is not in PENDING_VALIDATION. */
-  validate(
-    id: string,
-    decision: ValidationDecision,
-  ): Promise<void | NotFoundError | ConflictError>;
+  validate(id: string, decision: ValidationDecision): Promise<void | NotFoundError | ConflictError>;
 
   /** Submit updated documents. Returns an error if the request is not in WAITING_DOCUMENTS. */
-  updateDocuments(
-    id: string,
-    documents: string[],
-  ): Promise<void | NotFoundError | ConflictError>;
+  updateDocuments(id: string, documents: string[]): Promise<void | NotFoundError | ConflictError>;
 }
