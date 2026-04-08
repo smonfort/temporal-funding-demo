@@ -1,5 +1,7 @@
 # Funding Request Workflow
 
+> **Disclaimer**: This is a **fictional use case**, intentionally non-production-ready and not secured (no authentication, no real persistence, simplified mocks). It was created solely to illustrate the capabilities of [Temporal](https://temporal.io/).
+
 A **Temporal** + **Fastify** application that orchestrates the end-to-end processing of funding requests — document verification, fraud detection, and human validation — as a durable workflow.
 
 The project follows **hexagonal architecture** (ports & adapters): the HTTP layer and the Temporal infrastructure are fully decoupled via an application port.
